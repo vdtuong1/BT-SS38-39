@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Loader</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+  }
+  #background-image {
+    height: 100%;
+    width: 100%;
+    background: url('your-image-url.jpg') no-repeat center center;
+    background-size: cover;
+    filter: blur(10px);
+    transition: filter 2s ease-out;
+  }
+  #loading-text {
+    color: white;
+    font-size: 5em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 2s ease-out; 
+  }
+</style>
+</head>
+<body>
+<img src="https://scontent.fhan18-1.fna.fbcdn.net/v/t1.15752-9/419688457_714969950410020_396619319289132772_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=DlZcxHu4K1sAX8c4iHr&_nc_ht=scontent.fhan18-1.fna&oh=03_AdTUqaWC_LfucoTiHpLRJHjjw5tyecT5k_FHVJMIzK4q4g&oe=65DAA1BE">
+<div id="background-image"></div>
+<div id="loading-text">0%</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const bgImage = document.getElementById('background-image');
+    const loadingText = document.getElementById('loading-text');
+    let loadProgress = 0;
+
+    const intervalDuration = 20; 
+    const blurEffectDuration = 2000; 
+    const totalIterations = blurEffectDuration / intervalDuration;
+    const blurAmount = 10;
+    
+    let iterationCount = 0;
+
+    const intervalId = setInterval(function () {
+      iterationCount++;
+      loadProgress = iterationCount / totalIterations * 100;
+      loadingText.innerText = `${Math.round(loadProgress)}%`;
+      
+      bgImage.style.filter = `blur(${blurAmount * (1 - iterationCount / totalIterations)}px)`;
+
+      if (iterationCount >= totalIterations) {
+        clearInterval(intervalId);
+        loadingText.style.opacity = '0';
+        setTimeout(() => loadingText.remove(), 2000);
+      }
+    }, intervalDuration);
+  });
+</script>
+</body>
+</html>
